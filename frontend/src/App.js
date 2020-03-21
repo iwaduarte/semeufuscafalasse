@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState} from 'react';
+import Canvas from "./Canvas/Canvas";
+import Player from "./Player/Player"
+import Menu from "./Menu/Menu";
+import Interface from "./Interface/Interface";
+import useMove from "./Player/useMove";
+import playerConfig from "./Player/playerConfig";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    {/*// <Initialize/>*/
+    }
+    // console.log(display);
+    const [playerPosition, movePlayer] = useMove(playerConfig.LEFT);
+    const [start, setStart] = useState(false);
+    const [initialize, setInitialize] = useState(false);
+
+    return <>
+        <Canvas>
+            {initialize ?
+                <Interface playerPosition={playerPosition}
+                           start={start}
+                           setStart={setStart}
+                />
+                : < Menu setInitialize={setInitialize}/>
+
+            }
+            {start && <Player movePlayer={movePlayer}
+                              playerPosition={playerPosition}
+                              display={start}/>
+            }
+        </Canvas>
+
+    </>
+};
+
 
 export default App;
