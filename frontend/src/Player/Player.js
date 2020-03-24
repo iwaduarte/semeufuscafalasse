@@ -1,33 +1,33 @@
-import React, {useEffect, useState} from 'react';
+import React, {forwardRef, useEffect} from 'react';
 import styled from 'styled-components';
-import useMove from "./useMove";
-import playerConfig from "./playerConfig";
 
 const fuscaSrc = "/images/fusca.png";
 const PlayerSprite = styled.img`
-    display: ${props => props.display || 'none'};
+    display: ${props => props.show ? 'block' : 'none'};
     position: absolute;
-    bottom: 0;
+    top:  ${props => `${props.top}%`};
     left: ${props => `${props.left}%`};
-    // display:inline-block;
-    height: 100px;
-    width: 100px;
+    z-index: 1000;
+    // height: 25vh;
+    height: 160px;
+    // box-sizing: border-box;
+
+    // border: 2px solid red;
 `;
 
 
-const Player = ({display, playerPosition, movePlayer}) => {
-
+const Player = forwardRef((props, ref) => {
+    const {display, playerTop, playerPosition, movePlayer} = props;
 
     useEffect(() => {
-        document.addEventListener('keydown', movePlayer);
-
+         document.addEventListener('keydown', movePlayer);
         return () => document.removeEventListener('keydown', movePlayer);
-    }, []);
+    }, [movePlayer]);
 
     return <>
-        <PlayerSprite display={display} left={playerPosition} src={fuscaSrc}/>
+        <PlayerSprite ref={ref} show={display} top={playerTop} left={playerPosition} src={fuscaSrc}/>
 
     </>
-};
+});
 
 export default Player;
