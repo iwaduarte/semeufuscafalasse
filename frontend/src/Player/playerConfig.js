@@ -4,7 +4,7 @@
 // % unit
 const config = {
     TOP: 75,
-    LEFT: 42,
+    LEFT: 39,
     WIDTH: 160,
     HEIGHT: 160,
     SPEED: 1,

@@ -7,7 +7,7 @@ const PlayerSprite = styled.img`
     position: absolute;
     top:  ${props => `${props.top}%`};
     left: ${props => `${props.left}%`};
-    z-index: 1000;
+    z-index: 10;
     // height: 25vh;
     height: 160px;
     // box-sizing: border-box;
