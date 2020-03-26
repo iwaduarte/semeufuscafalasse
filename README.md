@@ -66,7 +66,7 @@ Para rodar localmente execute os seguintes comandos:
  
  Número de Voltas →  Implementado  
  
- Leaderboard → Implementado  
+ Leaderboard → Implementado parcialmente (usa-se o GraphQL localmente (mutation e query) mas não mostra o quadro de líderes)
  
  Fim de Corrida → Implementado  
  
