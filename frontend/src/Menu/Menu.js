@@ -16,14 +16,14 @@ const handleChange = (evt, cb) => {
     cb(evt.target.value);
 };
 
-const Menu = ({children, setInitialize}) => {
-    const [playerName, setPlayerName] = useState('');
-    const [playerEmail, setPlayerEmail] = useState('');
+const Menu = ({children, setInitialize, playerName, setPlayerName, playerEmail, setPlayerEmail, setResetAll}) => {
+
     const handleSubmit = (evt) => {
         evt.preventDefault();
         if (playerEmail === '' || playerName === '') return;
         console.log(`PlayerName:${playerName} PlayerEmail ${playerEmail}`);
         console.log(`Initializing modules...`);
+        setResetAll(false);
         setInitialize(true);
     };
     return <MenuBox>
