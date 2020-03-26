@@ -1,0 +1,28 @@
+name: Deploy to aws lambda using serverless framework
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    name:  Deploy aws lambda
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install serverless framework
+        working-directory: ./backend
+        run: npm install serverless --save-dev
+      - name: Serverless deploy
+        working-directory: ./backend
+        run: npm run deploy
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+
+
+
+
