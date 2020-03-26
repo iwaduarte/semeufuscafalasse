@@ -13,15 +13,10 @@ const ObstacleSprite = styled.img`
     // border: 2px solid red;
 `;
 
-
 const Obstacles = forwardRef( ({top, left, height, moveObstacle}, ref) => {
-
-    // const ref = useRef(null);
     //move Obstacle when rendered
     useEffect(() => {
-        // console.log('once');
         moveObstacle();
-
     }, [moveObstacle]);
 
     return <>
