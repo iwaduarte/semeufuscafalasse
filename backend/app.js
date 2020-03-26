@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const serverless = require('serverless-http');
+const models = require("./database/");
 const express = require('express');
 const path = require('path');
 const cookieParser = require('cookie-parser');
