@@ -1,9 +1,10 @@
 import {useCallback, useState} from 'react';
+import obstacleConfig from '../Obstacles/obstaclesConfig'
 
 const useMove = (playerInitialPosition, obstacleInitialPosition, setIntervalsId) => {
 
     const [obstaclePosition, setObstaclePosition] = useState(obstacleInitialPosition);
-    const [playerPosition, setPlayerPosition] = useState(playerInitialPosition);
+    const [playerPosition, setPlayerPosition] = useState(playerInitialPosition.LEFT);
     // const [positionBottom, setPositionBottom] = useState(0);
 
     //below we would have: movePlayer, moveSprite, moveEtc functions.
@@ -12,20 +13,20 @@ const useMove = (playerInitialPosition, obstacleInitialPosition, setIntervalsId)
             //left - (a) || arrow Left
             case 37:
             case 65:
-                console.log('moving left');
-                setPlayerPosition(20);
+                console.log('[LEFT]');
+                setPlayerPosition(10);
                 break;
             //right - (d) || arrow Right
             case 39:
             case 68:
-                console.log('moving right');
-                setPlayerPosition(64);
+                console.log('[RIGHT]');
+                setPlayerPosition(72);
 
                 break;
             //middle - (s)
             case 83:
-                console.log('moving center');
-                setPlayerPosition(playerInitialPosition);
+                console.log('[CENTER]');
+                setPlayerPosition(playerInitialPosition.LEFT);
                 break;
             // turbo - (w) || (arrow Up)
             case 38:
@@ -37,35 +38,41 @@ const useMove = (playerInitialPosition, obstacleInitialPosition, setIntervalsId)
                 console.log('breaking');
                 break;
             default:
-                console.log('other key');
                 break;
 
         }
-    },[playerInitialPosition]);
+    }, [playerInitialPosition]);
 
     //improvement check collision with the end of the canvas
     const moveObstacle = useCallback((event) => {
+        const random = ()=>Math.floor(Math.random() * 3);
         // console.log(obstacleInitialPosition);
         const moveIntervalId = setInterval(() => {
             setObstaclePosition(prevState => {
-                const {left, top, height} = prevState;
-                if (top > 88) {
-                    return obstacleInitialPosition
+                const {left, top, height, leftIncrease, width} = prevState;
+                if (top > 86) {
+                    return obstacleConfig[random()];
                     // clearInterval(obstacleInterval);
                     // return prevState
                 }
                 return {
-                    left: left - 0.3,
-                    top: top + 0.5,
-                    height: height + 0.8,
+                    left: left + leftIncrease,
+                    top: top * 1.01,
+                    height: height + 0.9,
+                    width,
+                    leftIncrease,
                 };
             });
         }, 25);
         setIntervalsId(prevState => [...prevState, moveIntervalId])
-    }, [obstacleInitialPosition, setIntervalsId] );
+    }, [obstacleInitialPosition, setIntervalsId]);
 
+    const resetPosition = useCallback(() => {
+        setPlayerPosition(playerInitialPosition.LEFT);
+        setObstaclePosition(obstacleInitialPosition);
+    }, [setObstaclePosition, setPlayerPosition, obstacleInitialPosition, playerInitialPosition]);
 
-    return [playerPosition, movePlayer, obstaclePosition, moveObstacle];
+    return [playerPosition, movePlayer, obstaclePosition, moveObstacle, resetPosition];
 };
 
 export default useMove;
