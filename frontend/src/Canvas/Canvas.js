@@ -18,12 +18,17 @@ const Canvas = ({children}) => <div style={{
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
     backgroundSize: "1000px 1000px",
-    width: "100vw",
+    width: "1000px",
+    margin: "auto",
     position: "absolute",
     zIndex: "-1",
-    height: "95vh"
-}}>{children}</div>;
+    height: "95vh",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
 
+}}>{children}</div>;
 
 
 export default Canvas;
