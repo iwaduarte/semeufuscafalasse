@@ -1,6 +1,7 @@
 import {lapConfig, endMessage, Sounds} from './InterfaceConfig';
 import React, {useCallback, useEffect, useState} from 'react';
-import {startPoints, checkCollision} from "./Engine";
+import {startPoints, checkCollision, timer} from "./Engine";
+import useAudio from "../myHooks/useAudio";
 import {
     InterfaceBox,
     Header, Laps, Points, TimerSeconds,
@@ -8,10 +9,11 @@ import {
     SoundPanel, SoundIcon, InterfaceButton, FinalButton
 } from "./InterfaceStyled";
 
+
+
 import {gql} from 'apollo-boost';
 import {useMutation} from '@apollo/react-hooks';
 
-import useAudio from "../myHooks/useAudio";
 
 const SAVE_POINTS = gql`
     mutation savePoints($points: String!,$name: String!, $email: String!) {
@@ -25,26 +27,10 @@ const SAVE_POINTS = gql`
     }
 `;
 
-
-const timer = (seconds, setSeconds, setIntervalsId) => {
-    const timer = seconds * 1000;
-    const dateNow = Date.now();
-    return new Promise((resolve, reject) => {
-        const intervalId = setInterval(() => {
-            const elapsedTime = Date.now() - dateNow;
-            const elapsedTimeCountdown = seconds - Math.floor(elapsedTime / 1000);
-            setSeconds(elapsedTimeCountdown);
-            if (elapsedTime >= timer) {
-                resolve(true);
-            }
-        }, 50);
-        setIntervalsId(prevState => [...prevState, intervalId]);
-
-    });
-};
 const [introAudio, introAudioStop, introToggleVolume] = useAudio(Sounds.INTRO);
 
 const Interface = ({
+                       setCanvasBg, canvasBgAnimated, canvasBgStatic,
                        resetGame, setResetGame, restartMatch, setRestartMatch,
                        playerName, playerEmail,
                        start, setStart,
@@ -54,7 +40,6 @@ const Interface = ({
     const [points, setPoints] = useState(0);
     const [lap, setLap] = useState(lapConfig.LAP_START);
     const [seconds, setSeconds] = useState(0);
-
     const [isMuted, setIsMuted] = useState(false);
     const [isPaused, setPause] = useState(false);
     const [hasFinished, setHasFinish] = useState(false);
@@ -64,10 +49,10 @@ const Interface = ({
     const handleResumeGame = useCallback(() => {
             if (isPaused) {
                 console.log('[Resuming Game...]');
-                //set Pause to false
+
                 setPause(false);
-                //sound Play
                 introAudio.play();
+                setCanvasBg(canvasBgAnimated.src);
                 //re-start startPoints function
                 const startIntervalId = startPoints(setPoints, points);
                 setIntervalsId(prevState => [...prevState, startIntervalId]);
@@ -75,7 +60,6 @@ const Interface = ({
                 moveObstacle();
                 //addEventListener for movePlayer
                 document.addEventListener("keydown", movePlayer);
-
             }
 
         },
@@ -85,6 +69,7 @@ const Interface = ({
             console.log('[Game Paused]');
             //set Pause to false
             setPause(true);
+            setCanvasBg(canvasBgStatic.src);
             introAudio.pause();
             intervalsId.forEach(interval => clearInterval(interval));
             setIntervalsId([null]); //added to update keyboardActions listener
@@ -107,15 +92,13 @@ const Interface = ({
 
     const gameOver = useCallback(async (outcome, points) => {
         console.log('[GameOver]');
-        //menu box with ended game
+        setCanvasBg(canvasBgStatic.src);
         setHasFinish(true);
-        //outcome message
+        setSeconds(0);
         setOutcome(outcome);
-        //clear intervals
         intervalsId.forEach(interval => {
             clearInterval(interval)
         });
-
         introAudioStop();
 
         document.removeEventListener("keydown", movePlayer);
@@ -130,21 +113,15 @@ const Interface = ({
         }).then(data => console.log('data', data))
             .catch(err => console.log('err', err));
 
-
-
         if (outcome === 'WIN') {
             console.log('YAY o/. [YOU WIN]')
-        }
-        if (outcome === 'LOST') {
+        } else if (outcome === 'LOST') {
             console.log('OhOh. [YOU LOSE]')
         }
-        //Display GameOver [options: restart, quit (goes to first screen)]
-        //
+
     }, [intervalsId, movePlayer, keyboardActions, playerEmail, playerName, savePoints]);
 
-
     const quitGame = () => {
-        //stopping sound and reset time
         introAudioStop();
         setHasFinish(false);
         setResetGame(true);
@@ -154,12 +131,9 @@ const Interface = ({
     const restartGame = () => {
         console.log('[Restarting...]');
         introAudioStop();
-        // intervalsId.forEach(interval => clearInterval(interval));
-        // console.log(intervalsId);
         setHasFinish(false);
         setRestartMatch(true);
     };
-
 
     useEffect(() => {
         if (intervalsId.length && start) {
@@ -170,17 +144,21 @@ const Interface = ({
 
     // start Game after timer
     useEffect(() => {
-
         if (!restartMatch && !resetGame) {
             (async () => {
                 await timer(3, setSeconds, setIntervalsId).then(shouldStart => {
                     if (shouldStart) {
                         setStart(true);
+                        setCanvasBg(canvasBgAnimated.src);
+                        setIsMuted(false);
+                        introAudio.volume = 1;
                         introAudio.play();
                     }
                 });
             })();
         }
+
+
     }, [restartMatch, resetGame, setIntervalsId, setStart]);
 
     // check state of start and initialize points and update interval array state
@@ -215,8 +193,8 @@ const Interface = ({
             const lapNumber = lapConfig[`LAP${positiveSeconds}`];
             if (lapNumber) {
                 if (lapNumber === 'GAME_OVER')
-                    return gameOver('WIN', points);
-                setLap(lapNumber)
+                    gameOver('WIN', points);
+                else setLap(lapNumber)
             }
         }
     }, [seconds, gameOver, points]);
@@ -228,8 +206,10 @@ const Interface = ({
             </Laps>
             {start && <>
                 <SoundPanel onClick={() => {
-                    introToggleVolume();
-                    setIsMuted(prevState => !prevState);
+                    if (!hasFinished) {
+                        introToggleVolume();
+                        setIsMuted(prevState =>  !prevState);
+                    }
                 }}>
                     <SoundIcon src={isMuted ? Sounds.ICON_MUTED : Sounds.ICON_PLAYING}
                                alt="Icon made by Muhammad Haq from www.freeicons.io  https://freeicons.io/profile/823"
