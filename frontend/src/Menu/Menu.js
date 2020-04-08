@@ -39,7 +39,7 @@ const Menu = ({children, setInitialize, playerName, setPlayerName, playerEmail, 
             <LabelInput>Nome:</LabelInput>
             <MenuInput value={playerName} onChange={(evt) => handleChange(evt, setPlayerName)} type="text"/>
             <LabelInput> Email: </LabelInput>
-            <MenuInput value={playerEmail} onChange={(evt) => handleChange(evt, setPlayerEmail)} type="text"/>
+            <MenuInput value={playerEmail} onChange={(evt) => handleChange(evt, setPlayerEmail)} type="email"/>
             <ButtonInput readOnly value="INICIAR" type="Submit"/>
         </MenuForm>
     </MenuBox>
