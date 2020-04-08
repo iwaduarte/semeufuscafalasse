@@ -42,7 +42,7 @@ const timer = (seconds, setSeconds, setIntervalsId) => {
 
     });
 };
-const [introAudio, introStop, introToggleVolume] = useAudio(Sounds.INTRO);
+const [introAudio, introAudioStop, introToggleVolume] = useAudio(Sounds.INTRO);
 
 const Interface = ({
                        resetGame, setResetGame, restartMatch, setRestartMatch,
@@ -116,6 +116,7 @@ const Interface = ({
             clearInterval(interval)
         });
 
+        introAudioStop();
 
         document.removeEventListener("keydown", movePlayer);
         document.removeEventListener("keydown", keyboardActions);
@@ -129,8 +130,7 @@ const Interface = ({
         }).then(data => console.log('data', data))
             .catch(err => console.log('err', err));
 
-        // setStart(false);
-        introStop();
+
 
         if (outcome === 'WIN') {
             console.log('YAY o/. [YOU WIN]')
@@ -145,19 +145,19 @@ const Interface = ({
 
     const quitGame = () => {
         //stopping sound and reset time
-        introStop();
+        introAudioStop();
         setHasFinish(false);
-        setResetAll(true);
+        setResetGame(true);
         console.log(' [Quitting...]')
     };
 
     const restartGame = () => {
         console.log('[Restarting...]');
-        introStop();
+        introAudioStop();
         // intervalsId.forEach(interval => clearInterval(interval));
         // console.log(intervalsId);
         setHasFinish(false);
-        setResetGame(true);
+        setRestartMatch(true);
     };
 
 
@@ -171,7 +171,7 @@ const Interface = ({
     // start Game after timer
     useEffect(() => {
 
-        if (!resetGame && !resetAll) {
+        if (!restartMatch && !resetGame) {
             (async () => {
                 await timer(3, setSeconds, setIntervalsId).then(shouldStart => {
                     if (shouldStart) {
@@ -181,7 +181,7 @@ const Interface = ({
                 });
             })();
         }
-    }, [resetGame, resetAll, setIntervalsId, setStart]);
+    }, [restartMatch, resetGame, setIntervalsId, setStart]);
 
     // check state of start and initialize points and update interval array state
     useEffect(() => {
@@ -194,7 +194,7 @@ const Interface = ({
 
     // collision
     useEffect(() => {
-        if (!resetAll && !resetGame) {
+        if (!resetGame && !restartMatch) {
 
             if (playerRef.current && obstacleRef.current) {
                 const hasCollided = checkCollision(
@@ -206,7 +206,7 @@ const Interface = ({
 
         }
 
-    }, [playerRef, obstacleRef, setStart, gameOver, points, resetAll, resetGame]);
+    }, [playerRef, obstacleRef, setStart, gameOver, points, resetGame, restartMatch]);
 
     //lap
     useEffect(() => {
