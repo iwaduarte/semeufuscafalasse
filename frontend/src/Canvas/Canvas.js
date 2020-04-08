@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Background = styled.div`
     display: flex;
-    background-image: url("/images/canvas_bg.gif");
+    background-image: ${props => `url("${props.canvasBg}");`}; 
     background-repeat: no-repeat;
     background-position: center;
     background-size: 1000px 1000px;
@@ -17,7 +17,7 @@ const Background = styled.div`
     right: 0;
     bottom: 0;
 `;
-const Canvas = ({children}) => <Background>{children}</Background>;
+const Canvas = ({children, canvasBg}) => <Background canvasBg={canvasBg}>{children}</Background>;
 
 
 export default Canvas;
