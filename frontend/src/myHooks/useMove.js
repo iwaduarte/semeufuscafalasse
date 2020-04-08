@@ -65,7 +65,7 @@ const useMove = (playerInitialPosition, obstacleInitialPosition, setIntervalsId)
             });
         }, 25);
         setIntervalsId(prevState => [...prevState, moveIntervalId])
-    }, [obstacleInitialPosition, setIntervalsId]);
+    }, [setIntervalsId]);
 
     const resetPosition = useCallback(() => {
         setPlayerPosition(playerInitialPosition.LEFT);
