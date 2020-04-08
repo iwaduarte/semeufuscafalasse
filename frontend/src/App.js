@@ -20,19 +20,17 @@ const graphQLconfig = {
     }
 };
 const client = new ApolloClient(graphQLconfig);
-//random start positions
 const randomObstacleConfig = obstacleConfig[Math.floor(Math.random() * 3)];
 
 const App = () => {
 
-    //all repeated set Interval tasks across the game
-    const [intervalsId, setIntervalsId] = useState([]);
+    const [intervalsIdList, setIntervalsIdList] = useState([]);
     const [playerName, setPlayerName] = useState('');
     const [playerEmail, setPlayerEmail] = useState('');
     const [
         playerPosition, movePlayer,
         obstaclePosition, moveObstacle,
-        resetPositions] = useMove(playerConfig, randomObstacleConfig, setIntervalsId);
+        resetPositions] = useMove(playerConfig, randomObstacleConfig, setIntervalsIdList);
     const [start, setStart] = useState(false);
     const [initialize, setInitialize] = useState(false);
     const [resetGame, setResetGame] = useState(false);
@@ -51,7 +49,7 @@ const App = () => {
 
         }
 
-    }, [resetAll]);
+    }, [resetAll, resetPositions]);
 
     //restart match
     useEffect(() => {
@@ -62,7 +60,7 @@ const App = () => {
             setResetGame(false);
         }
 
-    }, [resetGame]);
+    }, [resetGame,resetPositions]);
 
     return <>
         <ApolloProvider client={client}>
@@ -81,7 +79,7 @@ const App = () => {
                                           start={start} setStart={setStart}
                                           setInitialize={setInitialize}
                                           playerRef={playerRef} obstacleRef={obstacleRef}
-                                          intervalsId={intervalsId} setIntervalsId={setIntervalsId}
+                                          intervalsId={intervalsIdList} setIntervalsId={setIntervalsIdList}
                                           moveObstacle={moveObstacle} movePlayer={movePlayer}
                 />}
                 {start && <>
