@@ -8,10 +8,7 @@ const PlayerSprite = styled.img`
     top:  ${props => `${props.top}%`};
     left: ${props => `${props.left}%`};
     z-index: 10;
-    // height: 25vh;
     height: 160px;
-    // box-sizing: border-box;
-
     // border: 2px solid red;
 `;
 

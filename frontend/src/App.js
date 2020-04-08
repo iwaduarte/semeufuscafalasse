@@ -11,7 +11,6 @@ import Obstacles from "./Obstacles/Obstacles";
 
 import ApolloClient from 'apollo-boost';
 import {ApolloProvider} from '@apollo/react-hooks';
-//remove after setting proxy dev.
 const graphQLconfig = {
     uri: "http://localhost:3005/graphql",
     onError: ({networkError, graphQLErrors}) => {
@@ -33,14 +32,14 @@ const App = () => {
         resetPositions] = useMove(playerConfig, randomObstacleConfig, setIntervalsIdList);
     const [start, setStart] = useState(false);
     const [initialize, setInitialize] = useState(false);
+    const [restartMatch, setRestartMatch] = useState(false);
     const [resetGame, setResetGame] = useState(false);
-    const [resetAll, setResetAll] = useState(false);
     const playerRef = createRef();
     const obstacleRef = createRef();
 
     //reset game to main meu
     useEffect(() => {
-        if (resetAll) {
+        if (resetGame) {
             resetPositions();
             setStart(false);
             setInitialize(false);
@@ -49,18 +48,17 @@ const App = () => {
 
         }
 
-    }, [resetAll, resetPositions]);
+    }, [resetGame, resetPositions]);
 
-    //restart match
     useEffect(() => {
-        if (resetGame) {
+        if (restartMatch) {
             resetPositions();
             setStart(false);
             setInitialize(true);
-            setResetGame(false);
+            setRestartMatch(false);
         }
 
-    }, [resetGame,resetPositions]);
+    }, [restartMatch,resetPositions]);
 
     return <>
         <ApolloProvider client={client}>
@@ -70,12 +68,12 @@ const App = () => {
                                    playerEmail={playerEmail}
                                    setPlayerEmail={setPlayerEmail}
                                    setInitialize={setInitialize}
-                                   setResetAll = {setResetAll}
+                                   setResetGame = {setResetGame}
             />}
             <Canvas>
                 {initialize && <Interface playerName={playerName} playerEmail={playerEmail}
-                                          resetAll={resetAll} setResetAll={setResetAll}
                                           resetGame={resetGame} setResetGame={setResetGame}
+                                          restartMatch={restartMatch} setRestartMatch={setRestartMatch}
                                           start={start} setStart={setStart}
                                           setInitialize={setInitialize}
                                           playerRef={playerRef} obstacleRef={obstacleRef}

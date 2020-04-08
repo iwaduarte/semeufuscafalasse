@@ -1,5 +1,3 @@
-//it is not a hook yet, the goal is to be
-
 const useAudio = (url) => {
 
     const audio = new Audio(url);

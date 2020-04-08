@@ -1,8 +1,7 @@
 
-//related to initial configs
 
 // % unit
-const config = {
+const playerConfig = {
     TOP: 75,
     LEFT: 39,
     WIDTH: 160,
@@ -11,4 +10,4 @@ const config = {
     ACCELERATION: 0,
 };
 
-export default config;
+export default playerConfig;

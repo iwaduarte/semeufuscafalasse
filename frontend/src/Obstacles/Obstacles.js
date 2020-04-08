@@ -10,11 +10,10 @@ const ObstacleSprite = styled.img`
     left: ${props => props.left && `${props.left}%`};
     height: ${props => props.propsHeight ? `${props.propsHeight}px` : '33px'};
     box-sizing: border-box;
-    // border: 2px solid red;
+    // border: 2px solid red; //dev
 `;
 
-const Obstacles = forwardRef( ({top, left, height, moveObstacle}, ref) => {
-    //move Obstacle when rendered
+const Obstacles = forwardRef(({top, left, height, moveObstacle}, ref) => {
     useEffect(() => {
         moveObstacle();
     }, [moveObstacle]);
@@ -25,7 +24,6 @@ const Obstacles = forwardRef( ({top, left, height, moveObstacle}, ref) => {
                         left={left}
                         propsHeight={height}
                         src={obstacleSrc}/>
-
     </>
 });
 

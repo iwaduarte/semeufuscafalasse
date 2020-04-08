@@ -12,18 +12,17 @@ import {
 } from "./MenuStyled";
 
 const handleChange = (evt, cb) => {
-    // console.log(evt.target.value);
     cb(evt.target.value);
 };
 
-const Menu = ({children, setInitialize, playerName, setPlayerName, playerEmail, setPlayerEmail, setResetAll}) => {
+const Menu = ({children, setInitialize, playerName, setPlayerName, playerEmail, setPlayerEmail,  setResetGame}) => {
 
     const handleSubmit = (evt) => {
         evt.preventDefault();
         if (playerEmail === '' || playerName === '') return;
         console.log(`PlayerName:${playerName} PlayerEmail ${playerEmail}`);
         console.log(`Initializing modules...`);
-        setResetAll(false);
+        setResetGame(false);
         setInitialize(true);
     };
     return <MenuBox>

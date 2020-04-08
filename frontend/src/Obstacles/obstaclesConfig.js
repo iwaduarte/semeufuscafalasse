@@ -1,5 +1,5 @@
-//related to initial configs
-const config = [
+
+const obstaclesConfig = [
     {
         left: 42,
         leftIncrease: -0.5,
@@ -25,4 +25,4 @@ const config = [
 
 ];
 
-export default config;
+export default obstaclesConfig;
