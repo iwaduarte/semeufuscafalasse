@@ -5,9 +5,9 @@ const useMove = (playerInitialPosition, obstacleInitialPosition, setIntervalsId)
 
     const [obstaclePosition, setObstaclePosition] = useState(obstacleInitialPosition);
     const [playerPosition, setPlayerPosition] = useState(playerInitialPosition.LEFT);
-    // const [positionBottom, setPositionBottom] = useState(0);
 
     //below we would have: movePlayer, moveSprite, moveEtc functions.
+
     const movePlayer = useCallback((event) => {
         switch (event.keyCode) {
             //left - (a) || arrow Left
@@ -46,14 +46,11 @@ const useMove = (playerInitialPosition, obstacleInitialPosition, setIntervalsId)
     //improvement check collision with the end of the canvas
     const moveObstacle = useCallback((event) => {
         const random = ()=>Math.floor(Math.random() * 3);
-        // console.log(obstacleInitialPosition);
         const moveIntervalId = setInterval(() => {
             setObstaclePosition(prevState => {
                 const {left, top, height, leftIncrease, width} = prevState;
                 if (top > 86) {
                     return obstacleConfig[random()];
-                    // clearInterval(obstacleInterval);
-                    // return prevState
                 }
                 return {
                     left: left + leftIncrease,
