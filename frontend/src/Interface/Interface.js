@@ -25,17 +25,16 @@ const SAVE_POINTS = gql`
     }
 `;
 
-// promise timer
+
 const timer = (seconds, setSeconds, setIntervalsId) => {
     const timer = seconds * 1000;
     const dateNow = Date.now();
     return new Promise((resolve, reject) => {
         const intervalId = setInterval(() => {
-            const time = Date.now() - dateNow;   // elapsed time;
-            const displaySeconds = seconds - Math.floor(time / 1000); //elapsed time in as a countdown
-            setSeconds(displaySeconds);
-            if (time >= timer) {
-                // clearInterval(intervalId);
+            const elapsedTime = Date.now() - dateNow;
+            const elapsedTimeCountdown = seconds - Math.floor(elapsedTime / 1000);
+            setSeconds(elapsedTimeCountdown);
+            if (elapsedTime >= timer) {
                 resolve(true);
             }
         }, 50);
@@ -60,9 +59,8 @@ const Interface = ({
     const [isPaused, setPause] = useState(false);
     const [hasFinished, setHasFinish] = useState(false);
     const [outcome, setOutcome] = useState("");
-    const [savePoints, {data}] = useMutation(SAVE_POINTS);
+    const [savePoints,] = useMutation(SAVE_POINTS);
 
-    //fn /@Todo move to Engine.js
     const handleResumeGame = useCallback(() => {
             if (isPaused) {
                 console.log('[Resuming Game...]');
@@ -94,10 +92,8 @@ const Interface = ({
         }
     }, [setIntervalsId, intervalsId, movePlayer, isPaused]);
 
-    //fn keyboard key's other than the player interaction
     const keyboardActions = useCallback((event) => {
         switch (event.keyCode) {
-            //left - (a) || arrow Left
             case 27:
                 pauseGame();
                 break;
@@ -109,7 +105,6 @@ const Interface = ({
         }
     }, [pauseGame, handleResumeGame]);
 
-    //game is Over
     const gameOver = useCallback(async (outcome, points) => {
         console.log('[GameOver]');
         //menu box with ended game
@@ -121,18 +116,18 @@ const Interface = ({
             clearInterval(interval)
         });
 
-        //removeEventListener
+
         document.removeEventListener("keydown", movePlayer);
         document.removeEventListener("keydown", keyboardActions);
 
-        //savePoints
         await savePoints({
             variables: {
                 email: playerEmail,
                 name: playerName,
                 points: `${points}`,
             }
-        }).then(data => console.log('data', data));
+        }).then(data => console.log('data', data))
+            .catch(err => console.log('err', err));
 
         // setStart(false);
         introStop();
@@ -145,9 +140,9 @@ const Interface = ({
         }
         //Display GameOver [options: restart, quit (goes to first screen)]
         //
-    }, [intervalsId, movePlayer, keyboardActions]);
+    }, [intervalsId, movePlayer, keyboardActions, playerEmail, playerName, savePoints]);
 
-    //leaving to main menu
+
     const quitGame = () => {
         //stopping sound and reset time
         introStop();
@@ -156,7 +151,6 @@ const Interface = ({
         console.log(' [Quitting...]')
     };
 
-    //restarting to countdown
     const restartGame = () => {
         console.log('[Restarting...]');
         introStop();
@@ -166,20 +160,20 @@ const Interface = ({
         setResetGame(true);
     };
 
-    // listening to user events: (PAUSE, START)
+
     useEffect(() => {
-        if (intervalsId.length) {
+        if (intervalsId.length && start) {
             document.addEventListener('keydown', keyboardActions);
             return () => document.removeEventListener('keydown', keyboardActions);
         }
-    }, [intervalsId, keyboardActions]);
+    }, [intervalsId, keyboardActions, start]);
 
     // start Game after timer
     useEffect(() => {
 
         if (!resetGame && !resetAll) {
             (async () => {
-               await timer(3, setSeconds, setIntervalsId).then(shouldStart => {
+                await timer(3, setSeconds, setIntervalsId).then(shouldStart => {
                     if (shouldStart) {
                         setStart(true);
                         introAudio.play();
@@ -198,7 +192,7 @@ const Interface = ({
         }
     }, [start, setIntervalsId]);
 
-    // collision check of sprites
+    // collision
     useEffect(() => {
         if (!resetAll && !resetGame) {
 
@@ -206,27 +200,26 @@ const Interface = ({
                 const hasCollided = checkCollision(
                     obstacleRef.current.getBoundingClientRect(),
                     playerRef.current.getBoundingClientRect()
-                  , 0.96);
+                    , 0.96);
                 if (hasCollided) gameOver('LOST', points);
             }
 
         }
 
-    }, [playerRef, obstacleRef, setStart, gameOver]);
+    }, [playerRef, obstacleRef, setStart, gameOver, points, resetAll, resetGame]);
 
-    // checking lap and final game
-    // using negative values since calculation is done by having a countdown timer
+    //lap
     useEffect(() => {
         if (seconds < 0) {
-            const newSeconds = seconds * -1;
-            const lapNumber = lapConfig[`LAP${newSeconds}`];
+            const positiveSeconds = seconds * -1;
+            const lapNumber = lapConfig[`LAP${positiveSeconds}`];
             if (lapNumber) {
                 if (lapNumber === 'GAME_OVER')
                     return gameOver('WIN', points);
                 setLap(lapNumber)
             }
         }
-    }, [seconds, gameOver]);
+    }, [seconds, gameOver, points]);
 
     return <InterfaceBox>
         <Header>
