@@ -20,9 +20,13 @@ const graphQLconfig = {
 };
 const client = new ApolloClient(graphQLconfig);
 const randomObstacleConfig = obstacleConfig[Math.floor(Math.random() * 3)];
+const canvasBgStatic = new Image();
+canvasBgStatic.src = '/images/canvas_bg.jpg';
+const canvasBgAnimated = new Image();
+canvasBgAnimated.src = '/images/canvas_bg.gif';
 
 const App = () => {
-
+    const [canvasBg, setCanvasBg] = useState(canvasBgStatic.src);
     const [intervalsIdList, setIntervalsIdList] = useState([]);
     const [playerName, setPlayerName] = useState('');
     const [playerEmail, setPlayerEmail] = useState('');
@@ -70,12 +74,13 @@ const App = () => {
                                    setInitialize={setInitialize}
                                    setResetGame = {setResetGame}
             />}
-            <Canvas>
+            <Canvas canvasBg={canvasBg}>
                 {initialize && <Interface playerName={playerName} playerEmail={playerEmail}
                                           resetGame={resetGame} setResetGame={setResetGame}
                                           restartMatch={restartMatch} setRestartMatch={setRestartMatch}
                                           start={start} setStart={setStart}
                                           setInitialize={setInitialize}
+                                          setCanvasBg={setCanvasBg} canvasBgStatic={canvasBgStatic} canvasBgAnimated={canvasBgAnimated}
                                           playerRef={playerRef} obstacleRef={obstacleRef}
                                           intervalsId={intervalsIdList} setIntervalsId={setIntervalsIdList}
                                           moveObstacle={moveObstacle} movePlayer={movePlayer}
