@@ -45,7 +45,7 @@ const timer = (seconds, setSeconds, setIntervalsId) => {
 const [introAudio, introStop, introToggleVolume] = useAudio(Sounds.INTRO);
 
 const Interface = ({
-                       resetAll, setResetAll, resetGame, setResetGame,
+                       resetGame, setResetGame, restartMatch, setRestartMatch,
                        playerName, playerEmail,
                        start, setStart,
                        playerRef, obstacleRef, setIntervalsId, intervalsId,
