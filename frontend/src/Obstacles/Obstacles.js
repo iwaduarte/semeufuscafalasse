@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
+import obstacleSrc from '../assets/images/obstacles/rock.png';
 
-const obstacleSrc = '/images/obstacles/rock.png';
 const ObstacleSprite = styled.img`
   // display: ${props => props.display || 'none'};
   position: absolute;
@@ -18,11 +18,9 @@ const Obstacles = forwardRef(({ top, left, height, moveObstacle }, ref) => {
     moveObstacle();
   }, [moveObstacle]);
 
-  return (
-    <>
-      <ObstacleSprite ref={ref} top={top} left={left} propsHeight={height} src={obstacleSrc} />
-    </>
-  );
+  return <ObstacleSprite ref={ref} top={top} left={left} propsHeight={height} src={obstacleSrc} />;
 });
+
+Obstacles.displayName = 'Obstacles';
 
 export default Obstacles;

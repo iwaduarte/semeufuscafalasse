@@ -23,7 +23,7 @@ const client = new ApolloClient(graphQLconfig);
 const randomObstacleConfig = obstacleConfig[Math.floor(Math.random() * 3)];
 
 const App = () => {
-  const [canvasBg, setCanvasBg] = useState(canvasBgStatic.src);
+  const [canvasBg, setCanvasBg] = useState(canvasBgStatic);
   const [intervalsIdList, setIntervalsIdList] = useState([]);
   const [playerName, setPlayerName] = useState('');
   const [playerEmail, setPlayerEmail] = useState('');
@@ -45,8 +45,6 @@ const App = () => {
       resetPositions();
       setStart(false);
       setInitialize(false);
-      setPlayerName('');
-      setPlayerEmail('');
     }
   }, [resetGame, resetPositions]);
 
@@ -59,63 +57,58 @@ const App = () => {
     }
   }, [restartMatch, resetPositions]);
 
+  const handleStart = ({ playerName, playerEmail }) => {
+    setPlayerName(playerName);
+    setPlayerEmail(playerEmail);
+    setInitialize(true);
+  };
+
   return (
-    <>
-      <ApolloProvider client={client}>
-        {!initialize && (
-          <Menu
+    <ApolloProvider client={client}>
+      {!initialize && <Menu onSubmit={handleStart} />}
+      <Canvas canvasBg={canvasBg}>
+        {initialize && (
+          <Interface
             playerName={playerName}
-            setPlayerName={setPlayerName}
             playerEmail={playerEmail}
-            setPlayerEmail={setPlayerEmail}
-            setInitialize={setInitialize}
+            resetGame={resetGame}
             setResetGame={setResetGame}
+            restartMatch={restartMatch}
+            setRestartMatch={setRestartMatch}
+            start={start}
+            setStart={setStart}
+            setInitialize={setInitialize}
+            setCanvasBg={setCanvasBg}
+            canvasBgStatic={canvasBgStatic}
+            canvasBgAnimated={canvasBgAnimated}
+            playerRef={playerRef}
+            obstacleRef={obstacleRef}
+            intervalsId={intervalsIdList}
+            setIntervalsId={setIntervalsIdList}
+            moveObstacle={moveObstacle}
+            movePlayer={movePlayer}
           />
         )}
-        <Canvas canvasBg={canvasBg}>
-          {initialize && (
-            <Interface
-              playerName={playerName}
-              playerEmail={playerEmail}
-              resetGame={resetGame}
-              setResetGame={setResetGame}
-              restartMatch={restartMatch}
-              setRestartMatch={setRestartMatch}
-              start={start}
-              setStart={setStart}
-              setInitialize={setInitialize}
-              setCanvasBg={setCanvasBg}
-              canvasBgStatic={canvasBgStatic}
-              canvasBgAnimated={canvasBgAnimated}
-              playerRef={playerRef}
-              obstacleRef={obstacleRef}
-              intervalsId={intervalsIdList}
-              setIntervalsId={setIntervalsIdList}
-              moveObstacle={moveObstacle}
+        {start && (
+          <>
+            <Player
+              ref={playerRef}
               movePlayer={movePlayer}
+              playerPosition={playerPosition}
+              playerTop={playerConfig.TOP}
+              display={start}
             />
-          )}
-          {start && (
-            <>
-              <Player
-                ref={playerRef}
-                movePlayer={movePlayer}
-                playerPosition={playerPosition}
-                playerTop={playerConfig.TOP}
-                display={start}
-              />
-              <Obstacles
-                ref={obstacleRef}
-                top={obstaclePosition.top}
-                left={obstaclePosition.left}
-                height={obstaclePosition.height}
-                moveObstacle={moveObstacle}
-              />
-            </>
-          )}
-        </Canvas>
-      </ApolloProvider>
-    </>
+            <Obstacles
+              ref={obstacleRef}
+              top={obstaclePosition.top}
+              left={obstaclePosition.left}
+              height={obstaclePosition.height}
+              moveObstacle={moveObstacle}
+            />
+          </>
+        )}
+      </Canvas>
+    </ApolloProvider>
   );
 };
 

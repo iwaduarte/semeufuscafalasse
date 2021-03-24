@@ -20,11 +20,9 @@ const Player = forwardRef((props, ref) => {
     return () => document.removeEventListener('keydown', movePlayer);
   }, [movePlayer]);
 
-  return (
-    <>
-      <PlayerSprite ref={ref} show={display} top={playerTop} left={playerPosition} src={fuscaImage} />
-    </>
-  );
+  return <PlayerSprite ref={ref} show={display} top={playerTop} left={playerPosition} src={fuscaImage} />;
 });
+
+Player.displayName = `Player`;
 
 export default Player;

@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Background = styled.div`
   display: flex;
-  background-image: ${props => `url("${props.canvasBg}");`};
+  background-image: ${({ canvasBg }) => `url("${canvasBg}");`};
   background-repeat: no-repeat;
   background-position: center;
   background-size: 1000px 1000px;
