@@ -1,7 +1,7 @@
 import React, { forwardRef, useEffect } from 'react';
 import styled from 'styled-components';
+import fuscaImage from '../assets/images/fusca.png';
 
-const fuscaSrc = '/images/fusca.png';
 const PlayerSprite = styled.img`
   display: ${props => (props.show ? 'block' : 'none')};
   position: absolute;
@@ -22,7 +22,7 @@ const Player = forwardRef((props, ref) => {
 
   return (
     <>
-      <PlayerSprite ref={ref} show={display} top={playerTop} left={playerPosition} src={fuscaSrc} />
+      <PlayerSprite ref={ref} show={display} top={playerTop} left={playerPosition} src={fuscaImage} />
     </>
   );
 });
