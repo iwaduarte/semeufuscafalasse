@@ -30,3 +30,5 @@ semeufuscafalasse.txt
 backend/.env
 
 backend/bin/
+
+frontend/\.env
