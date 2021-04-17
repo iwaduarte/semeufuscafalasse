@@ -69,7 +69,7 @@ const Interface = ({
 
       setPause(false);
       introAudio.play();
-      setCanvasBg(canvasBgAnimated);
+      // setCanvasBg(canvasBgAnimated);
       //re-start startPoints function
       const startIntervalId = startPoints(setPoints, points);
       setIntervalsId(prevState => [...prevState, startIntervalId]);
@@ -84,7 +84,7 @@ const Interface = ({
       console.log('[Game Paused]');
       //set Pause to false
       setPause(true);
-      setCanvasBg(canvasBgStatic);
+      // setCanvasBg(canvasBgStatic);
       introAudio.pause();
       intervalsId.forEach(interval => clearInterval(interval));
       setIntervalsId([null]); //added to update keyboardActions listener
@@ -111,7 +111,7 @@ const Interface = ({
   const gameOver = useCallback(
     async (outcome, points) => {
       console.log('[GameOver]');
-      setCanvasBg(canvasBgStatic);
+      // setCanvasBg(canvasBgStatic);
       setHasFinish(true);
       setSeconds(0);
       setOutcome(outcome);
@@ -166,17 +166,15 @@ const Interface = ({
   // start Game after timer
   useEffect(() => {
     if (!restartMatch && !resetGame) {
-      (async () => {
-        await timer(3, setSeconds, setIntervalsId).then(shouldStart => {
-          if (shouldStart) {
-            setStart(true);
-            setCanvasBg(canvasBgAnimated);
-            setIsMuted(false);
-            introAudio.volume = 1;
-            introAudio.play();
-          }
-        });
-      })();
+      timer(3, setSeconds, setIntervalsId).then(shouldStart => {
+        if (shouldStart) {
+          setStart(true);
+          setCanvasBg(canvasBgAnimated);
+          setIsMuted(false);
+          introAudio.volume = 1;
+          introAudio.play();
+        }
+      });
     }
   }, [restartMatch, resetGame, setIntervalsId, setStart]);
 

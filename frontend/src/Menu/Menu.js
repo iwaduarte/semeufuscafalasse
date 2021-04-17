@@ -11,20 +11,23 @@ import {
   SubTitle
 } from './MenuStyled';
 
-const handleChange = (evt, cb) => {
-  cb(evt.target.value);
-};
-
 const Menu = ({ onSubmit }) => {
   const [playerName, setPlayerName] = useState('');
   const [playerEmail, setPlayerEmail] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = evt => {
     evt.preventDefault();
-    if (playerEmail === '' || playerName === '') return;
+    if (playerEmail === '' || playerName === '') {
+      setError('Nome e email são necessários! ');
+      setTimeout(() => {
+        setError('');
+      }, 3000);
+      return;
+    }
     const player = { playerName, playerEmail };
+    setError('');
     onSubmit(player);
-    // setInitialize(true);
   };
   return (
     <MenuBox>
@@ -41,10 +44,11 @@ const Menu = ({ onSubmit }) => {
       </GameTitle>
 
       <MenuForm onSubmit={handleSubmit}>
+        {error && <div style={{ color: 'red', marginBottom: '2px', padding: '2%', textAlign: 'center' }}> {error}</div>}
         <LabelInput>Nome:</LabelInput>
-        <MenuInput value={playerName} onChange={evt => handleChange(evt, setPlayerName)} type="text" />
+        <MenuInput value={playerName} onChange={evt => setPlayerName(evt.target.value)} type="text" />
         <LabelInput> Email: </LabelInput>
-        <MenuInput value={playerEmail} onChange={evt => handleChange(evt, setPlayerEmail)} type="email" />
+        <MenuInput value={playerEmail} onChange={evt => setPlayerEmail(evt.target.value)} type="email" />
         <ButtonInput readOnly value="INICIAR" type="Submit" />
       </MenuForm>
     </MenuBox>

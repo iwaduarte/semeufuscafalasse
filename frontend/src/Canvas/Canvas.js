@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
 
-const Background = styled.div`
+const Background = styled.div.attrs(({ canvasBg }) => ({
+  style: {
+    backgroundImage: `url(${canvasBg})`
+  }
+}))`
   display: flex;
-  background-image: ${({ canvasBg }) => `url("${canvasBg}");`};
   background-repeat: no-repeat;
   background-position: center;
   background-size: 1000px 1000px;
@@ -17,6 +20,13 @@ const Background = styled.div`
   right: 0;
   bottom: 0;
 `;
-const Canvas = ({ children, canvasBg }) => <Background canvasBg={canvasBg}>{children}</Background>;
+
+const Canvas = ({ children, canvasBg }) => {
+  useEffect(() => {
+    console.log(`CanvasBg`, canvasBg);
+  }, [canvasBg]);
+
+  return <Background canvasBg={canvasBg}>{children}</Background>;
+};
 
 export default Canvas;
