@@ -13,7 +13,8 @@ module.exports = {
         dbName: process.env.DBNAME,
         dbUser: process.env.DBUSER,
         dbPort: process.env.DBPORT,
-        dbPass: process.env.DBPASS,//only used locally if set in .env for test purposes
+        //only used locally if set in .env for test purposes
+        dbPass: process.env.DBPASS,
         dbSSL: true,
 
     },
