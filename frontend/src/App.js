@@ -3,12 +3,11 @@ import Canvas from './Canvas/Canvas';
 import Player from './Player/Player';
 import Menu from './Menu/Menu';
 import Interface from './Interface/Interface';
-import useMove from './myHooks/useMove';
+import useMove from './_myHooks/useMove';
 import Obstacles from './Obstacles/Obstacles';
 import playerConfig from './Player/playerConfig';
 import obstacleConfig from './Obstacles/obstaclesConfig';
-import ApolloClient from 'apollo-boost';
-import { ApolloProvider } from '@apollo/react-hooks';
+import {ApolloClient, ApolloProvider} from '@apollo/client';
 import canvasBgStatic from './assets/images/canvas_bg.jpg';
 import canvasBgAnimated from './assets/images/canvas_bg.gif';
 

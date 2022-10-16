@@ -1,7 +1,7 @@
 import { lapConfig, endMessage, Sounds } from './InterfaceConfig';
 import React, { useCallback, useEffect, useState } from 'react';
 import { startPoints, checkCollision, timer } from './Engine';
-import useAudio from '../myHooks/useAudio';
+import useAudio from '../_myHooks/useAudio';
 import {
   InterfaceBox,
   Header,
