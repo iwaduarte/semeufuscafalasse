@@ -5,7 +5,7 @@ const path = require('path');
 const Sequelize = require('sequelize');
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || 'development';
-const params = require('./config/config.js')[process.env.STAGE] || require('./config.js')['remote'] ;
+const params = require('./config/config.js')[process.env.STAGE] || require('./config/config.js')['remote'] ;
 const dbPass = require('./password').pwd || params.dbPass;
 const db = {};
 const {dbHost, dbName, dbUser, dbPort, dbSSL} = params;
@@ -45,7 +45,7 @@ fs
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
   })
   .forEach(file => {
-    const model = sequelize['import'](path.join('./models', file));
+    const model = require(path.join( __dirname,'models', file));
     db[model.name] = model;
   });
 
