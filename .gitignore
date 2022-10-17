@@ -29,6 +29,4 @@ semeufuscafalasse.txt
 .serverless
 backend/.env
 
-backend/bin/
-
 frontend/\.env
