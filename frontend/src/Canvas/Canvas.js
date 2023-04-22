@@ -26,7 +26,7 @@ const Canvas = ({ children, canvasBg }) => {
     console.log(`CanvasBg`, canvasBg);
   }, [canvasBg]);
 
-  return <Background canvasBg={canvasBg}>{children}</Background>;
+  return <canvas>{children}</canvas>;
 };
 
 export default Canvas;
