@@ -18,27 +18,26 @@ import {
   FinalButton
 } from './InterfaceStyled';
 
-import { gql } from 'apollo-boost';
-import { useMutation } from '@apollo/react-hooks';
+// import { gql } from 'apollo-boost';
+// import { useMutation } from '@apollo/react-hooks';
 
-const SAVE_POINTS = gql`
-  mutation savePoints($points: String!, $name: String!, $email: String!) {
-    savePoints(points: $points, name: $name, email: $email) {
-      id
-      points
-      user {
-        name
-      }
-    }
-  }
-`;
+// const SAVE_POINTS = gql`
+//   mutation savePoints($points: String!, $name: String!, $email: String!) {
+//     savePoints(points: $points, name: $name, email: $email) {
+//       id
+//       points
+//       user {
+//         name
+//       }
+//     }
+//   }
+// `;
 
 const [introAudio, introAudioStop, introToggleVolume] = useAudio(Sounds.INTRO);
 
 const Interface = ({
   setCanvasBg,
   canvasBgAnimated,
-  canvasBgStatic,
   resetGame,
   setResetGame,
   restartMatch,
@@ -61,7 +60,7 @@ const Interface = ({
   const [isPaused, setPause] = useState(false);
   const [hasFinished, setHasFinish] = useState(false);
   const [outcome, setOutcome] = useState('');
-  const [savePoints] = useMutation(SAVE_POINTS);
+  // const [savePoints] = useMutation(SAVE_POINTS);
 
   const handleResumeGame = useCallback(() => {
     if (isPaused) {
@@ -109,7 +108,7 @@ const Interface = ({
   );
 
   const gameOver = useCallback(
-    async (outcome, points) => {
+    async outcome => {
       console.log('[GameOver]');
       // setCanvasBg(canvasBgStatic);
       setHasFinish(true);
@@ -139,7 +138,7 @@ const Interface = ({
         console.log('OhOh. [YOU LOSE]');
       }
     },
-    [intervalsId, movePlayer, keyboardActions, playerEmail, playerName, savePoints]
+    [intervalsId, movePlayer, keyboardActions, playerEmail, playerName]
   );
 
   const quitGame = () => {

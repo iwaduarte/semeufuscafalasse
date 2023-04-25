@@ -1,20 +1,38 @@
 import React, { useEffect, useRef } from 'react';
 
-const Canvas = ({ children, canvasBg }) => {
+const drawRoad = (context, canvas) => {
+  // Clear the canvas
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
+  // Draw background
+  context.fillStyle = '#87CEEB';
+  context.fillRect(0, 0, canvas.width, canvas.height);
+
+  // Draw road
+  context.fillStyle = '#808080';
+  context.fillRect(200, 0, 400, canvas.height);
+
+  // Draw road lines
+  context.strokeStyle = '#FFFFFF';
+  context.lineWidth = 5;
+  context.beginPath();
+  for (let i = 10; i < canvas.height; i += 40) {
+    context.moveTo(400, i);
+    context.lineTo(400, i + 20);
+  }
+  context.closePath();
+  context.setLineDash([]);
+  context.stroke();
+};
+
+const Canvas = ({ children }) => {
   const canvasRef = useRef(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    const img = new Image();
-    img.src = canvasBg;
-    img.onload = () => {
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      context.drawImage(img, 0, 0, 1000, 1000);
-    };
-
-    console.log('[Canvas] useEffect: canvasBg', canvasBg);
-  }, [canvasBg]);
+    drawRoad(context, canvas);
+  }, []);
 
   const containerStyle = {
     display: 'flex',

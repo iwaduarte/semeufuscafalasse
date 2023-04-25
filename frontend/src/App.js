@@ -7,18 +7,21 @@ import useMove from './_myHooks/useMove';
 import Obstacles from './Obstacles/Obstacles';
 import playerConfig from './Player/playerConfig';
 import obstacleConfig from './Obstacles/obstaclesConfig';
-import {ApolloClient, ApolloProvider} from '@apollo/client';
 import canvasBgStatic from './assets/images/canvas_bg.jpg';
 import canvasBgAnimated from './assets/images/canvas_bg.gif';
+//
+// const graphQLconfig = {
+//   uri: 'http://localhost:3005/graphql',
+//   onError: ({ networkError, graphQLErrors }) => {
+//     console.log('graphQLErrors', graphQLErrors);
+//     console.log('networkError', networkError);
+//   }
+// };
+// const client = new ApolloClient(graphQLconfig);
 
-const graphQLconfig = {
-  uri: 'http://localhost:3005/graphql',
-  onError: ({ networkError, graphQLErrors }) => {
-    console.log('graphQLErrors', graphQLErrors);
-    console.log('networkError', networkError);
-  }
-};
-const client = new ApolloClient(graphQLconfig);
+// <ApolloProvider client={client}>
+// </ApolloProvider>
+
 const randomObstacleConfig = obstacleConfig[Math.floor(Math.random() * 3)];
 
 const App = () => {
@@ -63,7 +66,7 @@ const App = () => {
   };
 
   return (
-    <ApolloProvider client={client}>
+    <>
       {!initialize && <Menu onSubmit={handleStart} />}
       <Canvas canvasBg={canvasBg}>
         {initialize && (
@@ -107,7 +110,7 @@ const App = () => {
           </>
         )}
       </Canvas>
-    </ApolloProvider>
+    </>
   );
 };
 
