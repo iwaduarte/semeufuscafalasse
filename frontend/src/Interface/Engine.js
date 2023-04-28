@@ -41,4 +41,41 @@ const checkCollision = (spriteA, spriteB, percentageCollision) => {
   return false;
 };
 
+const update = () => {};
+
+const render = () => {};
+
+const Util = { timestamp: () => Date.now() };
+
+const frame = (now, dt, gdt, last, step) => {
+  now = Util.timestamp();
+  dt = Math.min(1, (now - last) / 1000); // using requestAnimationFrame have to be able to handle large delta's caused when it 'hibernates' in a background or non-visible tab
+  gdt = gdt + dt;
+  while (gdt > step) {
+    gdt = gdt - step;
+    update(step);
+  }
+  render();
+  last = now;
+  requestAnimationFrame(frame);
+};
+
+const Game = {
+  loadImages: () => {}
+};
+
+const run = options => {
+  Game.loadImages(options.images, function () {
+    const update = options.update, // method to update game logic is provided by caller
+      render = options.render, // method to render the game is provided by caller
+      step = options.step, // fixed frame step (1/fps) is specified by caller
+      now = null,
+      last = Util.timestamp(),
+      dt = 0,
+      gdt = 0;
+
+    frame(update, render, now, dt, gdt, last, step);
+  });
+};
+
 export { startPoints, checkCollision, timer };
