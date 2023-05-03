@@ -1,28 +1,32 @@
 import React, { useEffect, useRef } from 'react';
 
-const drawRoad = (context, canvas) => {
-  // Clear the canvas
-  context.clearRect(0, 0, canvas.width, canvas.height);
-
-  // Draw background
-  context.fillStyle = '#87CEEB';
-  context.fillRect(0, 0, canvas.width, canvas.height);
-
-  // Draw road
-  context.fillStyle = '#808080';
-  context.fillRect(200, 0, 400, canvas.height);
-
-  // Draw road lines
-  context.strokeStyle = '#FFFFFF';
-  context.lineWidth = 5;
+const dashLineRoad = ({ context, color = '#000', width = 20 }) => {
+  context.strokeStyle = color;
+  context.lineWidth = width;
   context.beginPath();
-  for (let i = 10; i < canvas.height; i += 40) {
-    context.moveTo(400, i);
-    context.lineTo(400, i + 20);
-  }
-  context.closePath();
-  context.setLineDash([]);
+  context.moveTo(0, 50);
+  context.lineTo(0, 300);
+  context.setLineDash([20, 10]);
   context.stroke();
+};
+
+const drawSegment = ({ context, color = '#6B6B6B', width = 20 }) => {
+  context.strokeStyle = color;
+  context.lineWidth = width;
+  context.rect();
+  context.stroke();
+};
+
+const drawRoad = (ctx, canvas) => {
+  dashLineRoad({ context: ctx });
+  drawSegment({ context: ctx, color: '#6B6B6B', width: 20 });
+
+  // Dashed line
+  // ctx.beginPath();
+  // ctx.moveTo(75, 50);
+  // ctx.lineTo(100, 75);
+  // ctx.lineTo(100, 25);
+  // ctx.fill();
 };
 
 const Canvas = ({ children }) => {
@@ -49,7 +53,7 @@ const Canvas = ({ children }) => {
 
   return (
     <div style={containerStyle}>
-      <canvas ref={canvasRef} width="1000" height="1000"></canvas>
+      <canvas ref={canvasRef} width="1000" height="1000" />
       {children}
     </div>
   );
