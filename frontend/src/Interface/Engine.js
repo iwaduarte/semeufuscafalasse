@@ -78,4 +78,4 @@ const run = options => {
   });
 };
 
-export { startPoints, checkCollision, timer };
+export { startPoints, checkCollision, timer, run };
